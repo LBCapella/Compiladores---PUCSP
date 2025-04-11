@@ -1,0 +1,34 @@
+package Lexema;
+
+public enum TokenType {
+    // Tokens de um único caractere.
+    LEFT_PAREN, RIGHT_PAREN, LEFT_BRACE, RIGHT_BRACE,
+    COMMA, DOT, MINUS, PLUS, PONTO_FINAL, SLASH, STAR,
+
+    // Tokens de um ou dois caracteres.
+    BANG, BANG_EQUAL,
+    EQUAL, EQUAL_EQUAL,
+    GREATER, GREATER_EQUAL,
+    LESS, LESS_EQUAL,
+
+    // Literais.
+    IDENTIFICADOR, STRING, NUMERICO, VARIAVEL,
+
+    // Palavras reservadas.
+    SENAO, FALSO, PARA, SE,
+    ESCREVA, RETURN,REAL, VERDADEIRO, INTEIRO, ENQUANTO, FACA_ENQUANTO,
+
+    //Aritméticos
+    ADICAO, SUBTRACAO, DIVISAO, MULTIPLICACAO, RESTO,
+
+    //Lógicos
+    LOGICO_OU, LOGICO_E, LOGICO_NAO,
+
+    //Relacionais
+    IGUAL,MAIOR_QUE, MENOR_QUE,DIFERENTE,RECEBE,MAIOR_IGUAL,MENOR_IGUAL,
+
+    //COMENTARIO
+    COMENTARIO,
+
+    EOF
+}
