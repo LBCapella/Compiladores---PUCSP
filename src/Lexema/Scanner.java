@@ -1,33 +1,13 @@
 package Lexema;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Scanner {
     private final String cadeia;
     private final List<Token> tokens = new ArrayList<>();
     private int inicio = 0;
     private int atual = 0;
-
-    private static final Map<String, TokenType> keywords;
-    static {
-        keywords = new HashMap<>();
-        keywords.put("e",    TokenType.LOGICO_E);
-        keywords.put("senao",   TokenType.SENAO);
-        keywords.put("falso",  TokenType.FALSO);
-        keywords.put("para",    TokenType.PARA);
-        keywords.put("se",     TokenType.SE);
-        keywords.put("ou",     TokenType.LOGICO_OU);
-        keywords.put("escreva",  TokenType.ESCREVA);
-        keywords.put("return", TokenType.RETURN);
-        keywords.put("verdadeiro",   TokenType.VERDADEIRO);
-        keywords.put("int",    TokenType.INTEIRO);
-        keywords.put("real", TokenType.REAL);
-        keywords.put("enquanto",  TokenType.ENQUANTO);
-        keywords.put("faca",  TokenType.FACA_ENQUANTO);
-    }
 
     public Scanner(String cadeia) {
         this.cadeia = cadeia;
@@ -48,9 +28,17 @@ public class Scanner {
         switch (c) {
             case '-': addToken(TokenType.SUBTRACAO); break;
             case '+': addToken(TokenType.ADICAO); break;
-            case ';': addToken(TokenType.PONTO_FINAL); break;
-            case '*': addToken(TokenType.MULTIPLICACAO); break;
+            case ';': addToken(TokenType.PONTO_VIRGULA); break;
+            case '.': addToken(TokenType.MULTIPLICACAO); break;
             case '=': addToken(TokenType.IGUAL); break;
+            case '(': addToken(TokenType.PARENTESES_E); break;
+            case ')': addToken(TokenType.PARENTESES_D); break;
+            case '{': addToken(TokenType.DELIMITADOR_E); break;
+            case '}': addToken(TokenType.DELIMITADOR_D); break;
+            case ',': addToken(TokenType.VIRGULA); break;
+            case '%': addToken(TokenType.RESTO); break;
+
+            case '"': fita(); break;
 
             // Tratamento de tokens com dois caracteres.
             case '<':
@@ -71,6 +59,7 @@ public class Scanner {
                 break;
 
             // Ignora espaços em branco, tabs e retornos de carro.
+            case '\'': caracter();;break;
             case ' ':
             case '\r':
             case '\t':
@@ -122,7 +111,7 @@ public class Scanner {
         return cadeia.charAt(atual);
     }
 
-    private void string() {
+    private void fita() {
         while (peek() != '"' && !isAtEnd()) {
             advance();
         }
@@ -133,6 +122,19 @@ public class Scanner {
         // Pega o conteúdo da string sem as aspas.
         String value = cadeia.substring(inicio + 1, atual - 1);
         addToken(TokenType.STRING, value);
+    }
+
+    private void caracter() {
+        while (peek() != '\'' && !isAtEnd()) {
+            advance();
+        }
+
+        // Consumir a aspa final.
+        advance();
+
+        // Pega o conteúdo da string sem as aspas.
+        String value = cadeia.substring(inicio + 1, atual - 1);
+        addToken(TokenType.CARACTER, value);
     }
 
     private boolean isDigit(char c) {
@@ -173,7 +175,7 @@ public class Scanner {
         while (isAlphaNumeric(peek())) advance();
 
         String text = cadeia.substring(inicio, atual);
-        TokenType type = keywords.get(text);
+        TokenType type = PalavrasReservadas.pReservadas.get(text);
         if (type == null) type = TokenType.IDENTIFICADOR;
         addToken(type);
     }
