@@ -87,12 +87,8 @@ public class Scanner {
     }
 
     private void addToken(TokenType type) {
-        addToken(type, null);
-    }
-
-    private void addToken(TokenType type, Object valor) {
         String text = cadeia.substring(inicio, atual);
-        tokens.add(new Token(type, text, valor));
+        tokens.add(new Token(type, text, null));
     }
 
     private boolean match(char expected) {
@@ -115,8 +111,7 @@ public class Scanner {
 
         avancar();
 
-        String value = cadeia.substring(inicio + 1, atual - 1);
-        addToken(TokenType.STRING, value);
+        addToken(TokenType.STRING);
     }
 
     private void caracter() {
@@ -126,8 +121,7 @@ public class Scanner {
 
         avancar();
 
-        String value = cadeia.substring(inicio + 1, atual - 1);
-        addToken(TokenType.CARACTER, value);
+        addToken(TokenType.CARACTER);
     }
 
     private void comentario() {
@@ -137,8 +131,7 @@ public class Scanner {
 
         avancar();
 
-        String value = cadeia.substring(inicio + 1, atual - 1);
-        addToken(TokenType.COMENTARIO, value);
+        addToken(TokenType.COMENTARIO);
     }
 
     private boolean isDigit(char c) {

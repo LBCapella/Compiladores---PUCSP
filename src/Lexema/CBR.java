@@ -5,7 +5,7 @@ import java.util.List;
 public class CBR {
     public static void main(String[] args) {
         // Exemplo de código fonte para testar o scanner.
-        String source = "a23";
+        String source = "*a23*\"oi\"";
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.analiseTokens();
         System.out.println("Mensagem escrita:\n"+source+"\n_______________\nléxico:\n");
