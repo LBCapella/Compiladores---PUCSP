@@ -13,8 +13,8 @@ public class Scanner {
         this.cadeia = cadeia;
     }
 
-    public List<Token> scanTokens() {
-        while (!isAtEnd()) {
+    public List<Token> analiseTokens() {
+        while (!finalDaCadeia()) {
             inicio = atual;
             scanToken();
         }
@@ -24,10 +24,11 @@ public class Scanner {
     }
 
     private void scanToken() {
-        char c = advance();
+        char c = avancar();
         switch (c) {
             case '-': addToken(TokenType.SUBTRACAO); break;
             case '+': addToken(TokenType.ADICAO); break;
+            case '/': addToken(TokenType.DIVISAO); break;
             case ';': addToken(TokenType.PONTO_VIRGULA); break;
             case '.': addToken(TokenType.MULTIPLICACAO); break;
             case '=': addToken(TokenType.IGUAL); break;
@@ -35,33 +36,27 @@ public class Scanner {
             case ')': addToken(TokenType.PARENTESES_D); break;
             case '{': addToken(TokenType.DELIMITADOR_E); break;
             case '}': addToken(TokenType.DELIMITADOR_D); break;
-            case ',': addToken(TokenType.VIRGULA); break;
             case '%': addToken(TokenType.RESTO); break;
-
+            case '\'': caracter();break;
+            case '*': comentario();break;
             case '"': fita(); break;
 
-            // Tratamento de tokens com dois caracteres.
             case '<':
-                addToken(match('<') ? TokenType.RECEBE : TokenType.MENOR_QUE);
+                if (match('<')) {
+                    addToken(TokenType.RECEBE);
+                }
+                else if (match('=')) {
+                    addToken(TokenType.MENOR_IGUAL);
+                }
+                else 
+                    addToken(TokenType.MENOR_QUE);
                 break;
             case '>':
                 addToken(match('=') ? TokenType.MAIOR_IGUAL : TokenType.MAIOR_QUE);
                 break;
 
-            case '/':
-                if (match('/')) {
-                    // Comentário de uma linha: descarta até o final da linha.
-                    while (peek() != '\n' && !isAtEnd()) advance();
-                    addToken(TokenType.COMENTARIO);
-                } else {
-                    addToken(TokenType.DIVISAO);
-                }
-                break;
-
-            // Ignora espaços em branco, tabs e retornos de carro.
-            case '\'': caracter();;break;
             case ' ':
-            case '\r':
+                break;
             case '\t':
                 break;
             case '\n':
@@ -71,7 +66,7 @@ public class Scanner {
                 if (isDigit(c)) {
                     number();
                 } else if (isAlpha(c)) {
-                    identifier();
+                    identificador();
                 } else {
                     System.err.println("Caractere inesperado: " + c);
                 }
@@ -79,11 +74,11 @@ public class Scanner {
         }
     }
 
-    private boolean isAtEnd() {
+    private boolean finalDaCadeia() {
         return atual >= cadeia.length();
     }
 
-    private char advance() {
+    private char avancar() {
         char c = cadeia.charAt(atual);
         atual++;
         return c;
@@ -93,48 +88,55 @@ public class Scanner {
         addToken(type, null);
     }
 
-    private void addToken(TokenType type, Object literal) {
+    private void addToken(TokenType type, Object valor) {
         String text = cadeia.substring(inicio, atual);
-        tokens.add(new Token(type, text, literal));
+        tokens.add(new Token(type, text, valor));
     }
 
     private boolean match(char expected) {
-        if (isAtEnd()) return false;
+        if (finalDaCadeia()) return false;
         if (cadeia.charAt(atual) != expected) return false;
 
         atual++;
         return true;
     }
 
-    private char peek() {
-        if (isAtEnd()) return '\0';
+    private char verProximo() {
+        if (finalDaCadeia()) return '\0';
         return cadeia.charAt(atual);
     }
 
     private void fita() {
-        while (peek() != '"' && !isAtEnd()) {
-            advance();
+        while (verProximo() != '"' && !finalDaCadeia()) {
+            avancar();
         }
 
-        // Consumir a aspa final.
-        advance();
+        avancar();
 
-        // Pega o conteúdo da string sem as aspas.
         String value = cadeia.substring(inicio + 1, atual - 1);
         addToken(TokenType.STRING, value);
     }
 
     private void caracter() {
-        while (peek() != '\'' && !isAtEnd()) {
-            advance();
+        while (verProximo() != '\'' && !finalDaCadeia()) {
+            avancar();
         }
 
-        // Consumir a aspa final.
-        advance();
+        avancar();
 
-        // Pega o conteúdo da string sem as aspas.
         String value = cadeia.substring(inicio + 1, atual - 1);
         addToken(TokenType.CARACTER, value);
+    }
+
+    private void comentario() {
+        while (verProximo() != '*' && !finalDaCadeia()) {
+            avancar();
+        }
+
+        avancar();
+
+        String value = cadeia.substring(inicio + 1, atual - 1);
+        addToken(TokenType.COMENTARIO, value);
     }
 
     private boolean isDigit(char c) {
@@ -142,21 +144,18 @@ public class Scanner {
     }
 
     private void number() {
-        while (isDigit(peek())) advance();
+        while (isDigit(verProximo())) avancar();
 
-        // Se encontrar um ponto seguido de um dígito, trata de números com parte fracionária.
-        if (peek() == '.' && isDigit(peekNext())) {
-            // Consome o ponto.
-            advance();
+        if (verProximo() == ',' && isDigit(verProximoNext())) {
+            avancar();
 
-            while (isDigit(peek())) advance();
+            while (isDigit(verProximo())) avancar();
         }
 
-        String numberString = cadeia.substring(inicio, atual);
-        addToken(TokenType.NUMERICO, Double.parseDouble(numberString));
+        addToken(TokenType.NUMERICO);
     }
 
-    private char peekNext() {
+    private char verProximoNext() {
         if (atual + 1 >= cadeia.length()) return '\0';
         return cadeia.charAt(atual + 1);
     }
@@ -171,8 +170,8 @@ public class Scanner {
         return isAlpha(c) || isDigit(c);
     }
 
-    private void identifier() {
-        while (isAlphaNumeric(peek())) advance();
+    private void identificador() {
+        while (isAlphaNumeric(verProximo())) avancar();
 
         String text = cadeia.substring(inicio, atual);
         TokenType type = PalavrasReservadas.pReservadas.get(text);

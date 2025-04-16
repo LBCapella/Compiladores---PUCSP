@@ -2,17 +2,16 @@ package Lexema;
 
 public class Token {
     final TokenType type;
-    final String lexeme;
-    final Object literal;
+    final String lexema;
+    final Object valor;
 
-    public Token(TokenType type, String lexeme, Object literal) {
+    public Token(TokenType type, String lexema, Object valor) {
         this.type = type;
-        this.lexeme = lexeme;
-        this.literal = literal;
+        this.lexema = lexema;
+        this.valor = valor;
     }
 
-    @Override
     public String toString() {
-        return type + " " + lexeme;
+        return type + " " + lexema;
     }
 }
