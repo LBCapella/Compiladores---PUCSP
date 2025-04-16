@@ -1,11 +1,10 @@
 package Lexema;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Scanner {
     private final String cadeia;
-    private final List<Token> tokens = new ArrayList<>();
+    private final ArrayList<Token> tokens = new ArrayList<>();
     private int inicio = 0;
     private int atual = 0;
 
@@ -13,7 +12,8 @@ public class Scanner {
         this.cadeia = cadeia;
     }
 
-    public List<Token> analiseTokens() {
+    public ArrayList<Token> analiseTokens() {
+        tokens.clear();
         while (!finalDaCadeia()) {
             inicio = atual;
             scanToken();
@@ -56,6 +56,8 @@ public class Scanner {
                 break;
 
             case ' ':
+                break;
+            case '\r':
                 break;
             case '\t':
                 break;
