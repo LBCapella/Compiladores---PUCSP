@@ -7,6 +7,7 @@ public class Scanner {
     private final ArrayList<Token> tokens = new ArrayList<>();
     private int inicio = 0;
     private int atual = 0;
+    private int linha = 1;
 
     public Scanner(String cadeia) {
         this.cadeia = cadeia;
@@ -19,7 +20,7 @@ public class Scanner {
             scanToken();
         }
 
-        tokens.add(new Token(TokenType.EOF, "", null));
+        tokens.add(new Token(TokenType.EOF, "eof", null, inicio, atual-1, linha));
         return tokens;
     }
 
@@ -62,6 +63,7 @@ public class Scanner {
             case '\t':
                 break;
             case '\n':
+                linha++;
                 break;
 
             default:
@@ -86,9 +88,15 @@ public class Scanner {
         return c;
     }
 
-    private void addToken(TokenType type) {
+    /*private void addToken(TokenType type) {
         String text = cadeia.substring(inicio, atual);
         tokens.add(new Token(type, text, null));
+    }*/
+    private void addToken(TokenType type) {
+        String text = cadeia.substring(inicio, atual);
+        int pos_inicial = inicio;
+        int pos_final = atual-1;
+        tokens.add(new Token(type, text, null, pos_inicial, pos_final, linha));
     }
 
     private boolean match(char expected) {

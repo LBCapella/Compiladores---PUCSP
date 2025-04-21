@@ -1,6 +1,8 @@
 package Lexema;
 
 public enum TokenType {
+    PROGRAMA,
+
     // Tokens de um único caractere.
     PONTO_VIRGULA,APOSTROFE,VIRGULA,
 

@@ -8,6 +8,7 @@ public class PalavrasReservadas {
     public static final Map<String, TokenType> pReservadas;
     static {
         pReservadas = new HashMap<>();
+        pReservadas.put("programa",  TokenType.PROGRAMA);
         pReservadas.put("e",    TokenType.LOGICO_E);
         pReservadas.put("senao",   TokenType.SENAO);
         pReservadas.put("falso",  TokenType.FALSO);
