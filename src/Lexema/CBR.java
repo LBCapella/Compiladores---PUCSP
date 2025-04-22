@@ -6,7 +6,7 @@ public class CBR {
     public static void main(String[] args) {
         // Exemplo de código fonte para testar o scanner.
         String source = "programa { int num << x; escreva(num);}";
-        Scanner scanner = new Scanner(source);
+        Lexer scanner = new Lexer(source);
         ArrayList<Token> tokens = scanner.analiseTokens();
         System.out.println("Mensagem escrita:\n"+source+"\n_______________\nléxico:\n");
         for (int i = 0; i < tokens.size(); i++){

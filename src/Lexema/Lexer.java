@@ -2,14 +2,14 @@ package Lexema;
 
 import java.util.ArrayList;
 
-public class Scanner {
+public class Lexer {
     private final String cadeia;
     private final ArrayList<Token> tokens = new ArrayList<>();
     private int inicio = 0;
     private int atual = 0;
     private int linha = 1;
 
-    public Scanner(String cadeia) {
+    public Lexer(String cadeia) {
         this.cadeia = cadeia;
     }
 
