@@ -88,10 +88,6 @@ public class Scanner {
         return c;
     }
 
-    /*private void addToken(TokenType type) {
-        String text = cadeia.substring(inicio, atual);
-        tokens.add(new Token(type, text, null));
-    }*/
     private void addToken(TokenType type) {
         String text = cadeia.substring(inicio, atual);
         int pos_inicial = inicio;
@@ -99,9 +95,9 @@ public class Scanner {
         tokens.add(new Token(type, text, null, pos_inicial, pos_final, linha));
     }
 
-    private boolean match(char expected) {
+    private boolean match(char proximo) {
         if (finalDaCadeia()) return false;
-        if (cadeia.charAt(atual) != expected) return false;
+        if (cadeia.charAt(atual) != proximo) return false;
 
         atual++;
         return true;
