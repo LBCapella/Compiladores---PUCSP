@@ -7,7 +7,7 @@ public enum TokenType {
     PONTO_VIRGULA,APOSTROFE,VIRGULA,
 
     // Literais.
-    IDENTIFICADOR, STRING, NUMERICO, VARIAVEL,
+    IDENTIFICADOR, TEXTO, NUMERICO, VARIAVEL,
 
     // Palavras reservadas.
     SENAO, FALSO, PARA, SE,

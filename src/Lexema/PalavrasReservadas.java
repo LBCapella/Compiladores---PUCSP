@@ -26,5 +26,7 @@ public class PalavrasReservadas {
         pReservadas.put("faca",  TokenType.FACA_ENQUANTO);
         pReservadas.put("carac",  TokenType.CARACTER_TYPE);
         pReservadas.put("bool",  TokenType.BOOL);
+        pReservadas.put("texto",  TokenType.TEXTO);
+
     }
 }

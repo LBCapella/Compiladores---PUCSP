@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class CBR {
     public static void main(String[] args) {
         // Exemplo de código fonte para testar o scanner.
-        String source = "programa { int num << x; escreva(num);}";
+        String source = "programa { int num << x; escreva(num);}"+ "\n texto t << \"comentario\""+"\n int x;";
         Lexer scanner = new Lexer(source);
-        ArrayList<Token> tokens = scanner.analiseTokens();
+        ArrayList<Token> tokens = scanner.analisarTokens();
         System.out.println("Mensagem escrita:\n"+source+"\n_______________\nléxico:\n");
         for (int i = 0; i < tokens.size(); i++){
             Token t = tokens.get(i);

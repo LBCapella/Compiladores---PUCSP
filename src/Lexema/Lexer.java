@@ -13,18 +13,18 @@ public class Lexer {
         this.cadeia = cadeia;
     }
 
-    public ArrayList<Token> analiseTokens() {
+    public ArrayList<Token> analisarTokens() {
         tokens.clear();
         while (!finalDaCadeia()) {
             inicio = atual;
-            scanToken();
+            scanearToken();
         }
 
-        tokens.add(new Token(TokenType.EOF, "eof", null, inicio, atual-1, linha));
+        tokens.add(new Token(TokenType.EOF, "eof", inicio, atual-1, linha));
         return tokens;
     }
 
-    private void scanToken() {
+    private void scanearToken() {
         char c = avancar();
         switch (c) {
             case '-': addToken(TokenType.SUBTRACAO); break;
@@ -40,20 +40,20 @@ public class Lexer {
             case '%': addToken(TokenType.RESTO); break;
             case '\'': caracter();break;
             case '*': comentario();break;
-            case '"': fita(); break;
+            case '"': texto(); break;
 
             case '<':
-                if (match('<')) {
+                if (proxIgual('<')) {
                     addToken(TokenType.RECEBE);
                 }
-                else if (match('=')) {
+                else if (proxIgual('=')) {
                     addToken(TokenType.MENOR_IGUAL);
                 }
                 else 
                     addToken(TokenType.MENOR_QUE);
                 break;
             case '>':
-                addToken(match('=') ? TokenType.MAIOR_IGUAL : TokenType.MAIOR_QUE);
+                addToken(proxIgual('=') ? TokenType.MAIOR_IGUAL : TokenType.MAIOR_QUE);
                 break;
 
             case ' ':
@@ -67,9 +67,9 @@ public class Lexer {
                 break;
 
             default:
-                if (isDigit(c)) {
-                    number();
-                } else if (isAlpha(c)) {
+                if (ehDigito(c)) {
+                    numero();
+                } else if (ehAlphanumerico(c)) {
                     identificador();
                 } else {
                     System.err.println("Caractere inesperado: " + c);
@@ -92,10 +92,10 @@ public class Lexer {
         String text = cadeia.substring(inicio, atual);
         int pos_inicial = inicio;
         int pos_final = atual-1;
-        tokens.add(new Token(type, text, null, pos_inicial, pos_final, linha));
+        tokens.add(new Token(type, text, pos_inicial, pos_final, linha));
     }
 
-    private boolean match(char proximo) {
+    private boolean proxIgual(char proximo) {
         if (finalDaCadeia()) return false;
         if (cadeia.charAt(atual) != proximo) return false;
 
@@ -108,14 +108,14 @@ public class Lexer {
         return cadeia.charAt(atual);
     }
 
-    private void fita() {
+    private void texto() {
         while (verProximo() != '"' && !finalDaCadeia()) {
             avancar();
         }
 
         avancar();
 
-        addToken(TokenType.STRING);
+        addToken(TokenType.TEXTO);
     }
 
     private void caracter() {
@@ -129,26 +129,25 @@ public class Lexer {
     }
 
     private void comentario() {
-        while (verProximo() != '*' && !finalDaCadeia()) {
+        while (verProximo() != '\n' && !finalDaCadeia()) {
             avancar();
         }
 
-        avancar();
 
         addToken(TokenType.COMENTARIO);
     }
 
-    private boolean isDigit(char c) {
+    private boolean ehDigito(char c) {
         return c >= '0' && c <= '9';
     }
 
-    private void number() {
-        while (isDigit(verProximo())) avancar();
+    private void numero() {
+        while (ehDigito(verProximo())) avancar();
 
-        if (verProximo() == ',' && isDigit(verProximoNext())) {
+        if (verProximo() == ',' && ehDigito(verProximoNext())) {
             avancar();
 
-            while (isDigit(verProximo())) avancar();
+            while (ehDigito(verProximo())) avancar();
         }
 
         addToken(TokenType.NUMERICO);
@@ -159,18 +158,18 @@ public class Lexer {
         return cadeia.charAt(atual + 1);
     }
 
-    private boolean isAlpha(char c) {
+    private boolean ehAlphanumerico(char c) {
         return (c >= 'a' && c <= 'z') ||
                 (c >= 'A' && c <= 'Z') ||
                 c == '_';
     }
 
-    private boolean isAlphaNumeric(char c) {
-        return isAlpha(c) || isDigit(c);
+    private boolean ehAlphanumericoNumeric(char c) {
+        return ehAlphanumerico(c) || ehDigito(c);
     }
 
     private void identificador() {
-        while (isAlphaNumeric(verProximo())) avancar();
+        while (ehAlphanumericoNumeric(verProximo())) avancar();
 
         String text = cadeia.substring(inicio, atual);
         TokenType type = PalavrasReservadas.pReservadas.get(text);
