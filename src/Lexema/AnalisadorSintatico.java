@@ -6,12 +6,12 @@ import java.util.ArrayList;
  * Analisador sintático para a linguagem CBR
  */
 public class AnalisadorSintatico {
-    private ArrayList<Token> tokens;
-    private int posicaoAtual;
-    private int limite;
-    private Token tokenAtual;
-    private No raiz;
-    private boolean temErro;
+    private ArrayList<Token> tokens; // Lista de tokens
+    private int posicaoAtual; // Índice do token atual na lista
+    private int limite; //Tamanho da lista de tokens
+    private Token tokenAtual; //Token sendo analisado
+    private No raiz; // Nó raiz da árvore sintática
+    private boolean temErro; // indicacão de erros na análise
 
     public AnalisadorSintatico(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -25,15 +25,15 @@ public class AnalisadorSintatico {
      * @return Árvore sintática resultante
      */
     public Arvore analisar() {
-        raiz = new No("Programa");
-        Arvore arvore = new Arvore(raiz);
+        raiz = new No("Programa"); // Criação nome raíz 'Programa'
+        Arvore arvore = new Arvore(raiz); // Criação da árvore
         
-        if (limite > 0) {
+        if (limite > 0) { // tendo tokens, inicia a análise
             tokenAtual = tokens.get(posicaoAtual);
-            programa();
+            programa(); //retorna a árvore sintática resultante
         }
         
-        if (!temErro) {
+        if (!temErro) { // Caso temErro = false
             System.out.println("Análise Sintática concluída com sucesso!");
         }
         
@@ -46,7 +46,7 @@ public class AnalisadorSintatico {
     private void programa() {
         // Verifica se o programa começa com a palavra reservada "programa"
         if (verificarToken(TokenType.PROGRAMA)) {
-            No noProgramaDecl = raiz.acrescentarFilho("Declaração de Programa");
+            No noProgramaDecl = raiz.acrescentarFilho("Declaração de Programa"); // inicia o nó raíz de declaração de programa e segue com o token
             noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
@@ -77,8 +77,7 @@ public class AnalisadorSintatico {
      * @param noBloco Nó que representa o bloco na árvore
      */
     private void bloco(No noBloco) {
-        while (posicaoAtual < limite && 
-               !verificarTokenSemAvancar(TokenType.DELIMITADOR_D)) {
+        while (posicaoAtual < limite && !verificarTokenSemAvancar(TokenType.DELIMITADOR_D)) {
             
             if (verificarTokenSemAvancar(TokenType.INTEIRO) || 
                 verificarTokenSemAvancar(TokenType.REAL) || 
