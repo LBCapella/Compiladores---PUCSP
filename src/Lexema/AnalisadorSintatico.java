@@ -386,65 +386,52 @@ public class AnalisadorSintatico {
             noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Inicialização
-            if (verificarTokenSemAvancar(TokenType.INTEIRO) || 
-                verificarTokenSemAvancar(TokenType.REAL)) {
-                declaracaoVariavel(noRepeticao);
-            } 
-            else if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
-                atribuicao(noRepeticao);
-            } 
-            else {
-                erro("Esperada inicialização no 'para'");
-            }
-            
-            // Condição
-            No noCondicao = noRepeticao.acrescentarFilho("Condição");
-            condicao(noCondicao);
-            
-            if (verificarToken(TokenType.PONTO_VIRGULA)) {
+            // Inicialização, verifica se é indentificador
+            if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
                 noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
-                
-                // Incremento
-                if (verificarToken(TokenType.IDENTIFICADOR)) {
-                    atribuicao(noRepeticao);
-                } 
-                else {
-                    erro("Esperado incremento no 'para'");
-                }
-                
-                // Parêntese de fechamento
-                if (verificarToken(TokenType.PARENTESES_D)) {
+            } 
+            else {
+                erro("Esperada Identificador no 'para'");
+            }
+            // Verificacao do ate
+            if (verificarToken(TokenType.ATE)){
+                noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+                avancarToken(); 
+            }
+            else {
+                erro("Esperado 'ate' após identificador");
+            }
+
+            // Limitador
+            No noLimitador = noRepeticao.acrescentarFilho("Limitador");
+            expressao(noLimitador);
+            
+            if (verificarToken(TokenType.PARENTESES_D)){
+                noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+                avancarToken();
+                // Bloco do para
+                if (verificarToken(TokenType.DELIMITADOR_E)) {
                     noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
                     
-                    // Bloco do para
-                    if (verificarToken(TokenType.DELIMITADOR_E)) {
+                    No noBloco = noRepeticao.acrescentarFilho("Bloco Para");
+                    bloco(noBloco);
+                    
+                    if (verificarToken(TokenType.DELIMITADOR_D)) {
                         noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                         avancarToken();
-                        
-                        No noBloco = noRepeticao.acrescentarFilho("Bloco Para");
-                        bloco(noBloco);
-                        
-                        if (verificarToken(TokenType.DELIMITADOR_D)) {
-                            noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
-                            avancarToken();
-                        } 
-                        else {
-                            erro("Esperado '}' para fechar o bloco 'para'");
-                        }
                     } 
                     else {
-                        erro("Esperado '{' para iniciar o bloco 'para'");
+                        erro("Esperado '}' para fechar o bloco 'para'");
                     }
                 } 
                 else {
-                    erro("Esperado ')' após incremento");
+                    erro("Esperado '{' para iniciar o bloco 'para'");
                 }
-            } 
-            else {
-                erro("Esperado ';' após condição");
+            }
+            else{
+                erro("Esperado ')' após expressao");
             }
         } 
         else {

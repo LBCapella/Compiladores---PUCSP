@@ -27,6 +27,6 @@ public class PalavrasReservadas {
         pReservadas.put("carac",  TokenType.CARACTER_TYPE);
         pReservadas.put("bool",  TokenType.BOOL);
         pReservadas.put("texto",  TokenType.TEXTO);
-
+        pReservadas.put("ate",  TokenType.ATE);
     }
 }
