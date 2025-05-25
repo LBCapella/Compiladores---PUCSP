@@ -19,7 +19,7 @@ public class ExemploCompleto {
                "        escreva(contador);\n" +
                "    }\n" +
                "    \n" +
-               "    para (int i << 0; i < 5; i << i + 1) {\n" +
+               "    para (int i << 0; i < 5; i << i + 1;) {\n" +
                "        escreva(i);\n" +
                "    }\n" +
                "    \n" +

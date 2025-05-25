@@ -6,12 +6,12 @@ import java.util.ArrayList;
  * Analisador sintático para a linguagem CBR
  */
 public class AnalisadorSintatico {
-    private ArrayList<Token> tokens; // Lista de tokens
-    private int posicaoAtual; // Índice do token atual na lista
-    private int limite; //Tamanho da lista de tokens
-    private Token tokenAtual; //Token sendo analisado
-    private No raiz; // Nó raiz da árvore sintática
-    private boolean temErro; // indicacão de erros na análise
+    private ArrayList<Token> tokens;    
+    private int posicaoAtual;            
+    private int limite;                  
+    private Token tokenAtual;          
+    private No raiz;                    
+    private boolean temErro;            
 
     public AnalisadorSintatico(ArrayList<Token> tokens) {
         this.tokens = tokens;
@@ -25,15 +25,15 @@ public class AnalisadorSintatico {
      * @return Árvore sintática resultante
      */
     public Arvore analisar() {
-        raiz = new No("Programa"); // Criação nome raíz 'Programa'
-        Arvore arvore = new Arvore(raiz); // Criação da árvore
+        raiz = new No("Programa"); 
+        Arvore arvore = new Arvore(raiz); 
         
-        if (limite > 0) { // tendo tokens, inicia a análise
+        if (limite > 0) { 
             tokenAtual = tokens.get(posicaoAtual);
-            programa(); //retorna a árvore sintática resultante
+            programa(); 
         }
         
-        if (!temErro) { // Caso temErro = false
+        if (!temErro) { 
             System.out.println("Análise Sintática concluída com sucesso!");
         }
         
@@ -44,13 +44,13 @@ public class AnalisadorSintatico {
      * Analisa a estrutura principal do programa
      */
     private void programa() {
-        // Verifica se o programa começa com a palavra reservada "programa"
+        
         if (verificarToken(TokenType.PROGRAMA)) {
-            No noProgramaDecl = raiz.acrescentarFilho("Declaração de Programa"); // inicia o nó raíz de declaração de programa e segue com o token
+            No noProgramaDecl = raiz.acrescentarFilho("Declaração de Programa"); 
             noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Verifica se há um bloco de código delimitado por chaves
+            
             if (verificarToken(TokenType.DELIMITADOR_E)) {
                 noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
@@ -61,13 +61,16 @@ public class AnalisadorSintatico {
                 if (verificarToken(TokenType.DELIMITADOR_D)) {
                     noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
-                } else {
+                } 
+                else {
                     erro("Esperado '}' para fechar o bloco do programa");
                 }
-            } else {
+            } 
+            else {
                 erro("Esperado '{' para iniciar o bloco do programa");
             }
-        } else {
+        } 
+        else {
             erro("Programa deve começar com a palavra-chave 'programa'");
         }
     }
@@ -85,21 +88,28 @@ public class AnalisadorSintatico {
                 verificarTokenSemAvancar(TokenType.CARACTER_TYPE) || 
                 verificarTokenSemAvancar(TokenType.TEXTO)) {
                 declaracaoVariavel(noBloco);
-            } else if (verificarTokenSemAvancar(TokenType.SE)) {
+            } 
+            else if (verificarTokenSemAvancar(TokenType.SE)) {
                 estruturaCondicional(noBloco);
-            } else if (verificarTokenSemAvancar(TokenType.ENQUANTO)) {
+            } 
+            else if (verificarTokenSemAvancar(TokenType.ENQUANTO)) {
                 estruturaRepeticaoEnquanto(noBloco);
-            } else if (verificarTokenSemAvancar(TokenType.PARA)) {
+            } 
+            else if (verificarTokenSemAvancar(TokenType.PARA)) {
                 estruturaRepeticaoPara(noBloco);
-            } else if (verificarTokenSemAvancar(TokenType.ESCREVA)) {
+            } 
+            else if (verificarTokenSemAvancar(TokenType.ESCREVA)) {
                 comandoEscreva(noBloco);
-            } else if (verificarTokenSemAvancar(TokenType.LEIA)) {
+            } 
+            else if (verificarTokenSemAvancar(TokenType.LEIA)) {
                 comandoLeia(noBloco);
-            } else if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
+            } 
+            else if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
                 atribuicao(noBloco);
-            } else {
+            } 
+            else {
                 erro("Comando não reconhecido: " + tokenAtual.getLexema());
-                avancarToken(); // Avança para tentar recuperar do erro
+                avancarToken(); 
             }
         }
     }
@@ -122,7 +132,7 @@ public class AnalisadorSintatico {
             noId.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Verificar se há atribuição
+            // Verificar se há atribuição / Caso não tenha, é necessário ao menos ';'
             if (verificarToken(TokenType.RECEBE)) {
                 noDeclaracao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
@@ -134,10 +144,12 @@ public class AnalisadorSintatico {
             if (verificarToken(TokenType.PONTO_VIRGULA)) {
                 noDeclaracao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
-            } else {
+            } 
+            else {
                 erro("Esperado ';' após declaração de variável");
             }
-        } else {
+        } 
+        else {
             erro("Esperado identificador após tipo");
         }
     }
@@ -172,7 +184,7 @@ public class AnalisadorSintatico {
                     noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
                     
-                    No noBloco = noCondicional.acrescentarFilho("Bloco If");
+                    No noBloco = noCondicional.acrescentarFilho("Bloco SE");
                     bloco(noBloco);
                     
                     if (verificarToken(TokenType.DELIMITADOR_D)) {
@@ -188,29 +200,35 @@ public class AnalisadorSintatico {
                                 noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                                 avancarToken();
                                 
-                                No noBlocoElse = noCondicional.acrescentarFilho("Bloco Else");
+                                No noBlocoElse = noCondicional.acrescentarFilho("Bloco SENAO");
                                 bloco(noBlocoElse);
                                 
                                 if (verificarToken(TokenType.DELIMITADOR_D)) {
                                     noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                                     avancarToken();
-                                } else {
+                                } 
+                                else {
                                     erro("Esperado '}' para fechar o bloco 'senao'");
                                 }
-                            } else {
+                            } 
+                            else {
                                 erro("Esperado '{' para iniciar o bloco 'senao'");
                             }
                         }
-                    } else {
+                    } 
+                    else {
                         erro("Esperado '}' para fechar o bloco 'se'");
                     }
-                } else {
+                } 
+                else {
                     erro("Esperado '{' para iniciar o bloco 'se'");
                 }
-            } else {
+            } 
+            else {
                 erro("Esperado ')' após a condição");
             }
-        } else {
+        } 
+        else {
             erro("Esperado '(' após 'se'");
         }
     }
@@ -266,16 +284,20 @@ public class AnalisadorSintatico {
         if (verificarToken(TokenType.IDENTIFICADOR)) {
             noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
-        } else if (verificarToken(TokenType.NUMERICO)) {
+        } 
+        else if (verificarToken(TokenType.NUMERICO)) {
             noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
-        } else if (verificarToken(TokenType.TEXTO)) {
+        } 
+        else if (verificarToken(TokenType.TEXTO)) {
             noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
-        } else if (verificarToken(TokenType.VERDADEIRO) || verificarToken(TokenType.FALSO)) {
+        } 
+        else if (verificarToken(TokenType.VERDADEIRO) || verificarToken(TokenType.FALSO)) {
             noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
-        } else if (verificarToken(TokenType.PARENTESES_E)) {
+        } 
+        else if (verificarToken(TokenType.PARENTESES_E)) {
             noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
@@ -284,10 +306,12 @@ public class AnalisadorSintatico {
             if (verificarToken(TokenType.PARENTESES_D)) {
                 noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
-            } else {
+            } 
+            else {
                 erro("Esperado ')' para fechar expressão");
             }
-        } else {
+        } 
+        else {
             erro("Termo inválido: " + tokenAtual.getLexema());
         }
     }
@@ -328,16 +352,20 @@ public class AnalisadorSintatico {
                     if (verificarToken(TokenType.DELIMITADOR_D)) {
                         noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                         avancarToken();
-                    } else {
+                    } 
+                    else {
                         erro("Esperado '}' para fechar o bloco 'enquanto'");
                     }
-                } else {
+                } 
+                else {
                     erro("Esperado '{' para iniciar o bloco 'enquanto'");
                 }
-            } else {
+            } 
+            else {
                 erro("Esperado ')' após a condição");
             }
-        } else {
+        } 
+        else {
             erro("Esperado '(' após 'enquanto'");
         }
     }
@@ -362,9 +390,11 @@ public class AnalisadorSintatico {
             if (verificarTokenSemAvancar(TokenType.INTEIRO) || 
                 verificarTokenSemAvancar(TokenType.REAL)) {
                 declaracaoVariavel(noRepeticao);
-            } else if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
+            } 
+            else if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
                 atribuicao(noRepeticao);
-            } else {
+            } 
+            else {
                 erro("Esperada inicialização no 'para'");
             }
             
@@ -379,7 +409,8 @@ public class AnalisadorSintatico {
                 // Incremento
                 if (verificarToken(TokenType.IDENTIFICADOR)) {
                     atribuicao(noRepeticao);
-                } else {
+                } 
+                else {
                     erro("Esperado incremento no 'para'");
                 }
                 
@@ -399,19 +430,24 @@ public class AnalisadorSintatico {
                         if (verificarToken(TokenType.DELIMITADOR_D)) {
                             noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                             avancarToken();
-                        } else {
+                        } 
+                        else {
                             erro("Esperado '}' para fechar o bloco 'para'");
                         }
-                    } else {
+                    } 
+                    else {
                         erro("Esperado '{' para iniciar o bloco 'para'");
                     }
-                } else {
+                } 
+                else {
                     erro("Esperado ')' após incremento");
                 }
-            } else {
+            } 
+            else {
                 erro("Esperado ';' após condição");
             }
-        } else {
+        } 
+        else {
             erro("Esperado '(' após 'para'");
         }
     }
@@ -444,13 +480,16 @@ public class AnalisadorSintatico {
                 if (verificarToken(TokenType.PONTO_VIRGULA)) {
                     noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
-                } else {
+                } 
+                else {
                     erro("Esperado ';' após comando 'escreva'");
                 }
-            } else {
+            } 
+            else {
                 erro("Esperado ')' após expressão");
             }
-        } else {
+        } 
+        else {
             erro("Esperado '(' após 'escreva'");
         }
     }
@@ -486,16 +525,20 @@ public class AnalisadorSintatico {
                     if (verificarToken(TokenType.PONTO_VIRGULA)) {
                         noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                         avancarToken();
-                    } else {
+                    } 
+                    else {
                         erro("Esperado ';' após comando 'leia'");
                     }
-                } else {
+                } 
+                else {
                     erro("Esperado ')' após identificador");
                 }
-            } else {
+            } 
+            else {
                 erro("Esperado identificador após '('");
             }
-        } else {
+        } 
+        else {
             erro("Esperado '(' após 'leia'");
         }
     }
@@ -524,10 +567,12 @@ public class AnalisadorSintatico {
             if (verificarToken(TokenType.PONTO_VIRGULA)) {
                 noAtribuicao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
-            } else {
+            } 
+            else {
                 erro("Esperado ';' após atribuição");
             }
-        } else {
+        } 
+        else {
             erro("Esperado '<<' para atribuição");
         }
     }
