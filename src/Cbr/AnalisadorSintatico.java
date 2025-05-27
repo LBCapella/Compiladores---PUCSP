@@ -50,25 +50,40 @@ public class AnalisadorSintatico {
             noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            
-            if (verificarToken(TokenType.DELIMITADOR_E)) {
+            if (verificarToken(TokenType.PARENTESES_E)) {
                 noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
-                
-                No blocoPrograma = raiz.acrescentarFilho("Bloco de Programa");
-                bloco(blocoPrograma);
-                
-                if (verificarToken(TokenType.DELIMITADOR_D)) {
-                    noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
-                    avancarToken();
-                } 
+
+                if (verificarToken(TokenType.PARENTESES_D)) {
+                noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+                avancarToken();
+            
+                    if (verificarToken(TokenType.DELIMITADOR_E)) {
+                        noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+                        avancarToken();
+                        
+                        No blocoPrograma = raiz.acrescentarFilho("Bloco de Programa");
+                        bloco(blocoPrograma);
+                        
+                        if (verificarToken(TokenType.DELIMITADOR_D)) {
+                            noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+                            avancarToken();
+                        } 
+                        else {
+                            erro("Esperado '}' para fechar o bloco do programa");
+                        }
+                    } 
+                    else {
+                        erro("Esperado '{' para iniciar o bloco do programa");
+                    }
+                }
                 else {
                     erro("Esperado '}' para fechar o bloco do programa");
                 }
-            } 
-            else {
-                erro("Esperado '{' para iniciar o bloco do programa");
             }
+            else {
+            erro("Esperado '(' após 'programa'");
+        }
         } 
         else {
             erro("Programa deve começar com a palavra-chave 'programa'");

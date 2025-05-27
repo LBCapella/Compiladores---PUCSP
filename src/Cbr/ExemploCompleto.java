@@ -2,7 +2,7 @@ package Cbr;
 
 public class ExemploCompleto {
     public static String getCodigoExemplo() {
-        return "programa {\n" +
+        return "programa () {\n" +
                "    int contador << 0;\n" +
                "    int limite << 10;\n" +
                "    texto mensagem << \"Contador:\";\n" +
