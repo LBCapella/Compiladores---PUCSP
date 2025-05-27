@@ -1,7 +1,7 @@
-package Lexema;
+package Cbr;
 
 /**
- * Classe que representa a árvore sintática
+ * Árvore sintática
  */
 public class Arvore {
     private No raiz;

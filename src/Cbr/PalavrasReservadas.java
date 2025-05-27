@@ -1,4 +1,4 @@
-package Lexema;
+package Cbr;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class PalavrasReservadas {
         pReservadas.put("real", TokenType.REAL);
         pReservadas.put("enquanto",  TokenType.ENQUANTO);
         pReservadas.put("faca",  TokenType.FACA_ENQUANTO);
-        pReservadas.put("carac",  TokenType.CARACTER_TYPE);
+        pReservadas.put("carac",  TokenType.CARACTER);
         pReservadas.put("bool",  TokenType.BOOL);
         pReservadas.put("texto",  TokenType.TEXTO);
         pReservadas.put("ate",  TokenType.ATE);

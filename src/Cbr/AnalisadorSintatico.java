@@ -1,4 +1,4 @@
-package Lexema;
+package Cbr;
 
 import java.util.ArrayList;
 
@@ -85,7 +85,7 @@ public class AnalisadorSintatico {
             if (verificarTokenSemAvancar(TokenType.INTEIRO) || 
                 verificarTokenSemAvancar(TokenType.REAL) || 
                 verificarTokenSemAvancar(TokenType.BOOL) || 
-                verificarTokenSemAvancar(TokenType.CARACTER_TYPE) || 
+                verificarTokenSemAvancar(TokenType.CARACTER) || 
                 verificarTokenSemAvancar(TokenType.TEXTO)) {
                 declaracaoVariavel(noBloco);
             } 
@@ -239,7 +239,7 @@ public class AnalisadorSintatico {
      */
     private void condicao(No noPai) {
         expressao(noPai);
-        
+        // opRelacional
         if (verificarTokenSemAvancar(TokenType.IGUAL) || 
             verificarTokenSemAvancar(TokenType.MAIOR_QUE) || 
             verificarTokenSemAvancar(TokenType.MENOR_QUE) || 
@@ -290,6 +290,10 @@ public class AnalisadorSintatico {
             avancarToken();
         } 
         else if (verificarToken(TokenType.TEXTO)) {
+            noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+            avancarToken();
+        } 
+        else if (verificarToken(TokenType.CARACTER)) {
             noTermo.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
         } 

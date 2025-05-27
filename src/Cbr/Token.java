@@ -1,4 +1,4 @@
-package Lexema;
+package Cbr;
 
 public class Token {
     final TokenType type;

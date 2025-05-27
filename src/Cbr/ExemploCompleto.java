@@ -1,4 +1,4 @@
-package Lexema;
+package Cbr;
 
 public class ExemploCompleto {
     public static String getCodigoExemplo() {
@@ -35,6 +35,8 @@ public class ExemploCompleto {
                "    leia(contador);\n" +
                "    escreva(\"Novo valor do contador:\");\n" +
                "    escreva(contador);\n" +
+               "    escreva('E');\n" +
+               "    carac eita;\n" +
                "}";
     }
 } 

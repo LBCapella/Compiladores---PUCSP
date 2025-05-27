@@ -1,4 +1,4 @@
-package Lexema;
+package Cbr;
 
 public enum TokenType {
     PROGRAMA,
@@ -11,7 +11,7 @@ public enum TokenType {
 
     // Palavras reservadas.
     SENAO, FALSO, PARA, ATE, SE,
-    ESCREVA, RETURN,REAL, VERDADEIRO, INTEIRO, ENQUANTO, FACA_ENQUANTO,CARACTER_TYPE,CARACTER,
+    ESCREVA, RETURN,REAL, VERDADEIRO, INTEIRO, ENQUANTO, FACA_ENQUANTO,CARACTER,
     BOOL, LEIA,
 
     //Aritméticos e símbolos
