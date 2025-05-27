@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class CBR {
     public static void main(String[] args) {
         // Código fonte para testar o analisador
-        String source = ExemploCompleto.getCodigoExemplo();
+        String source = ExemploCompleto.getCodigoExemplo_2();
         
         // Análise léxica
         Lexer scanner = new Lexer(source);

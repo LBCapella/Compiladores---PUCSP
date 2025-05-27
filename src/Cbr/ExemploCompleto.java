@@ -39,4 +39,13 @@ public class ExemploCompleto {
                "    carac eita;\n" +
                "}";
     }
+    public static String getCodigoExemplo_2() {
+        return "programa () {\n" +
+               "    int i << 2;\n" +
+               "    para (i ate 10) {\n" +
+               "        escreva(i);\n" +
+               "    }\n" +
+               "    i << 3;\n" +
+               "}";
+    }
 } 

@@ -15,10 +15,10 @@ public class Token {
         this.linha = linha;
     }
 
-    public TokenType getType()   { return type; }
-    public String getLexema()    { return lexema; }
-    public int getPos_inicial()        { return pos_inicial; }
-    public int getPos_final()          { return pos_final; }
+    public TokenType getType()    { return type; }
+    public String getLexema()     { return lexema; }
+    public int getPos_inicial()   { return pos_inicial; }
+    public int getPos_final()     { return pos_final; }
     public int getLinha()         { return linha; }
 
     public String toString() {

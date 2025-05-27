@@ -55,14 +55,14 @@ public class AnalisadorSintatico {
                 avancarToken();
 
                 if (verificarToken(TokenType.PARENTESES_D)) {
-                noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
-                avancarToken();
+                    noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+                    avancarToken();
             
                     if (verificarToken(TokenType.DELIMITADOR_E)) {
                         noProgramaDecl.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                         avancarToken();
                         
-                        No blocoPrograma = raiz.acrescentarFilho("Bloco de Programa");
+                        No blocoPrograma = noProgramaDecl.acrescentarFilho("Bloco de Programa");
                         bloco(blocoPrograma);
                         
                         if (verificarToken(TokenType.DELIMITADOR_D)) {
@@ -407,7 +407,8 @@ public class AnalisadorSintatico {
             
             // Inicialização, verifica se é indentificador
             if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
-                noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
+                No noIdentificador = noRepeticao.acrescentarFilho("Identificador");
+                noIdentificador.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
             } 
             else {
@@ -421,10 +422,8 @@ public class AnalisadorSintatico {
             else {
                 erro("Esperado 'ate' após identificador");
             }
-
-            // Limitador
-            No noLimitador = noRepeticao.acrescentarFilho("Limitador");
-            expressao(noLimitador);
+            // Expressao   
+            expressao(noRepeticao);
             
             if (verificarToken(TokenType.PARENTESES_D)){
                 noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
