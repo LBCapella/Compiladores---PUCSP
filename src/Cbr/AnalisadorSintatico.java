@@ -147,7 +147,6 @@ public class AnalisadorSintatico {
             noId.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Verificar se há atribuição / Caso não tenha, é necessário ao menos ';'
             if (verificarToken(TokenType.RECEBE)) {
                 noDeclaracao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
@@ -155,7 +154,6 @@ public class AnalisadorSintatico {
                 expressao(noDeclaracao);
             }
             
-            // Verificar ponto e vírgula
             if (verificarToken(TokenType.PONTO_VIRGULA)) {
                 noDeclaracao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
@@ -176,11 +174,9 @@ public class AnalisadorSintatico {
     private void estruturaCondicional(No noPai) {
         No noCondicional = noPai.acrescentarFilho("Estrutura Condicional");
         
-        // Palavra-chave 'se'
         noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
         avancarToken();
         
-        // Parêntese de abertura
         if (verificarToken(TokenType.PARENTESES_E)) {
             noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
@@ -189,7 +185,6 @@ public class AnalisadorSintatico {
             No noCondicao = noCondicional.acrescentarFilho("Condição");
             condicao(noCondicao);
             
-            // Parêntese de fechamento
             if (verificarToken(TokenType.PARENTESES_D)) {
                 noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
@@ -206,7 +201,6 @@ public class AnalisadorSintatico {
                         noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                         avancarToken();
                         
-                        // Verificar se há um 'senao'
                         if (verificarTokenSemAvancar(TokenType.SENAO)) {
                             noCondicional.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                             avancarToken();
@@ -254,7 +248,7 @@ public class AnalisadorSintatico {
      */
     private void condicao(No noPai) {
         expressao(noPai);
-        // opRelacional
+
         if (verificarTokenSemAvancar(TokenType.IGUAL) || 
             verificarTokenSemAvancar(TokenType.MAIOR_QUE) || 
             verificarTokenSemAvancar(TokenType.MENOR_QUE) || 
@@ -342,11 +336,9 @@ public class AnalisadorSintatico {
     private void estruturaRepeticaoEnquanto(No noPai) {
         No noRepeticao = noPai.acrescentarFilho("Estrutura de Repetição Enquanto");
         
-        // Palavra-chave 'enquanto'
         noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
         avancarToken();
         
-        // Parêntese de abertura
         if (verificarToken(TokenType.PARENTESES_E)) {
             noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
@@ -355,12 +347,10 @@ public class AnalisadorSintatico {
             No noCondicao = noRepeticao.acrescentarFilho("Condição");
             condicao(noCondicao);
             
-            // Parêntese de fechamento
             if (verificarToken(TokenType.PARENTESES_D)) {
                 noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
                 
-                // Bloco do enquanto
                 if (verificarToken(TokenType.DELIMITADOR_E)) {
                     noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
@@ -396,16 +386,13 @@ public class AnalisadorSintatico {
     private void estruturaRepeticaoPara(No noPai) {
         No noRepeticao = noPai.acrescentarFilho("Estrutura de Repetição Para");
         
-        // Palavra-chave 'para'
         noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
         avancarToken();
         
-        // Parêntese de abertura
         if (verificarToken(TokenType.PARENTESES_E)) {
             noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Inicialização, verifica se é indentificador
             if (verificarTokenSemAvancar(TokenType.IDENTIFICADOR)) {
                 No noIdentificador = noRepeticao.acrescentarFilho("Identificador");
                 noIdentificador.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
@@ -414,7 +401,6 @@ public class AnalisadorSintatico {
             else {
                 erro("Esperada Identificador no 'para'");
             }
-            // Verificacao do ate
             if (verificarToken(TokenType.ATE)){
                 noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken(); 
@@ -422,13 +408,12 @@ public class AnalisadorSintatico {
             else {
                 erro("Esperado 'ate' após identificador");
             }
-            // Expressao   
             expressao(noRepeticao);
             
             if (verificarToken(TokenType.PARENTESES_D)){
                 noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
-                // Bloco do para
+
                 if (verificarToken(TokenType.DELIMITADOR_E)) {
                     noRepeticao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
@@ -464,24 +449,19 @@ public class AnalisadorSintatico {
     private void comandoEscreva(No noPai) {
         No noComando = noPai.acrescentarFilho("Comando Escreva");
         
-        // Palavra-chave 'escreva'
         noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
         avancarToken();
         
-        // Parêntese de abertura
         if (verificarToken(TokenType.PARENTESES_E)) {
             noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Expressão
             expressao(noComando);
             
-            // Parêntese de fechamento
             if (verificarToken(TokenType.PARENTESES_D)) {
                 noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
                 
-                // Ponto e vírgula
                 if (verificarToken(TokenType.PONTO_VIRGULA)) {
                     noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
@@ -506,27 +486,22 @@ public class AnalisadorSintatico {
     private void comandoLeia(No noPai) {
         No noComando = noPai.acrescentarFilho("Comando Leia");
         
-        // Palavra-chave 'leia'
         noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
         avancarToken();
         
-        // Parêntese de abertura
         if (verificarToken(TokenType.PARENTESES_E)) {
             noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Identificador
             if (verificarToken(TokenType.IDENTIFICADOR)) {
                 No noId = noComando.acrescentarFilho("Identificador");
                 noId.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
                 
-                // Parêntese de fechamento
                 if (verificarToken(TokenType.PARENTESES_D)) {
                     noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                     avancarToken();
                     
-                    // Ponto e vírgula
                     if (verificarToken(TokenType.PONTO_VIRGULA)) {
                         noComando.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                         avancarToken();
@@ -560,15 +535,12 @@ public class AnalisadorSintatico {
         noId.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
         avancarToken();
         
-        // Operador de atribuição
         if (verificarToken(TokenType.RECEBE)) {
             noAtribuicao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
             avancarToken();
             
-            // Expressão
             expressao(noAtribuicao);
             
-            // Ponto e vírgula
             if (verificarToken(TokenType.PONTO_VIRGULA)) {
                 noAtribuicao.acrescentarFilho(tokenAtual.getType() + ": " + tokenAtual.getLexema());
                 avancarToken();
