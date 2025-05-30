@@ -1,4 +1,4 @@
-package Cbr;
+package compiler.lexical;
 
 import java.util.ArrayList;
 
