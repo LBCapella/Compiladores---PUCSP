@@ -1,4 +1,4 @@
-package Cbr;
+package compiler.main;
 
 public class ExemploCompleto {
     public static String getCodigoExemplo() {

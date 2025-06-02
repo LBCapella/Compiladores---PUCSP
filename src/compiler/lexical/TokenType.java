@@ -1,4 +1,4 @@
-package Cbr;
+package compiler.lexical;
 
 public enum TokenType {
     PROGRAMA,
