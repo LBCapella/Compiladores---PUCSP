@@ -19,7 +19,8 @@ public class Parser {
             if (pos < tokens.size()) {
                 tokenAtual = tokens.get(pos);
             }
-        } else {
+        } 
+        else {
             erro("Esperado: " + tipo + ", encontrado: " + tokenAtual.getType());
         }
     }
@@ -51,7 +52,8 @@ public class Parser {
         while (ehDeclaracao() || ehComando()) {
             if (ehDeclaracao()) {
                 noBloco.adicionarFilho(declaracao());
-            } else {
+            } 
+            else {
                 noBloco.adicionarFilho(comando());
             }
         }

@@ -8,7 +8,7 @@ import java.util.List;
 public class CBR {
     public static void main(String[] args) {
         // Para testar com o exemplo completo, descomente a linha abaixo:
-        String codigoFonte = ExemploCompleto.getCodigoExemplo();
+        String codigoFonte = ExemploCompleto.getCodigoExemplo_2();
         //String codigoFonte = "programa() { int x; x << 10; escreva(x); }";
         try {
             Lexer lexer = new Lexer(codigoFonte);

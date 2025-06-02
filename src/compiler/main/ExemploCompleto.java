@@ -45,7 +45,6 @@ public class ExemploCompleto {
                "    para (i ate 10) {\n" +
                "        escreva(i);\n" +
                "    }\n" +
-               "    i << 3;\n" +
                "}";
     }
 } 
