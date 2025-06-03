@@ -10,6 +10,7 @@ public class CBR {
         // Para testar com o exemplo completo, descomente a linha abaixo:
         String codigoFonte = ExemploCompleto.getCodigoExemplo_2();
         //String codigoFonte = "programa() { int x; x << 10; escreva(x); }";
+        System.out.println("Codigo Fonte: \n" + codigoFonte);
         try {
             Lexer lexer = new Lexer(codigoFonte);
             List<Token> tokens = lexer.analisarTokens();

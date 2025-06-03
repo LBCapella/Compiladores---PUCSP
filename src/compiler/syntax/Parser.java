@@ -255,12 +255,14 @@ public class Parser {
                 return new ASTNode("caracter", carac.getLexema());
             }
             case VERDADEIRO: {
+                Token verdadeiro = tokenAtual;
                 consumir(TokenType.VERDADEIRO);
-                return new ASTNode("booleano", true);
+                return new ASTNode("booleano", verdadeiro.getLexema());
             }
             case FALSO: {
+                Token falso = tokenAtual;
                 consumir(TokenType.FALSO);
-                return new ASTNode("booleano", false);
+                return new ASTNode("booleano", falso.getLexema());
             }
             case PARENTESES_E: {
                 consumir(TokenType.PARENTESES_E);
