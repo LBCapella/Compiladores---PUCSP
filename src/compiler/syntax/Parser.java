@@ -13,15 +13,15 @@ public class Parser {
         this.tokenAtual = tokens.get(pos);
     }
 
-    private void consumir(TokenType tipo) {
-        if (tokenAtual.getType() == tipo) {
+    private void consumir(TokenType token) {
+        if (tokenAtual.getType() == token) {
             pos++;
             if (pos < tokens.size()) {
                 tokenAtual = tokens.get(pos);
             }
         } 
         else {
-            erro("Esperado: " + tipo + ", encontrado: " + tokenAtual.getType());
+            erro("Esperado: " + token + ", encontrado: " + tokenAtual.getType());
         }
     }
 
@@ -46,15 +46,15 @@ public class Parser {
         return noPrograma;
     }
 
-    // bloco: (declaracao | comando)*;
+    // bloco: (declaracao | instrucao)*;
     private ASTNode bloco() {
         ASTNode noBloco = new ASTNode("bloco");
-        while (ehDeclaracao() || ehComando()) {
+        while (ehDeclaracao() || ehInstrucao()) {
             if (ehDeclaracao()) {
                 noBloco.adicionarFilho(declaracao());
             } 
             else {
-                noBloco.adicionarFilho(comando());
+                noBloco.adicionarFilho(instrucao());
             }
         }
         return noBloco;
@@ -91,8 +91,8 @@ public class Parser {
         return new ASTNode("tipo", tipo);
     }
 
-    // comando: estruturaCondicional | estruturaRepeticaoEnquanto | estruturaRepeticaoPara | comandoEscreva | comandoLeia | atribuicao;
-    private ASTNode comando() {
+    // instrucao: estruturaCondicional | estruturaRepeticaoEnquanto | estruturaRepeticaoPara | comandoEscreva | comandoLeia | atribuicao;
+    private ASTNode instrucao() {
         switch (tokenAtual.getType()) {
             case SE: return estruturaCondicional();
             case ENQUANTO: return estruturaRepeticaoEnquanto();
@@ -100,7 +100,7 @@ public class Parser {
             case ESCREVA: return comandoEscreva();
             case LEIA: return comandoLeia();
             case IDENTIFICADOR: return atribuicao();
-            default: erro("Comando inválido"); return null;
+            default: erro("Instrução inválida"); return null;
         }
     }
 
@@ -285,7 +285,7 @@ public class Parser {
                tokenAtual.getType() == TokenType.TEXTO;
     }
 
-    private boolean ehComando() {
+    private boolean ehInstrucao() {
         switch (tokenAtual.getType()) {
             case SE:
             case ENQUANTO:
