@@ -13,13 +13,13 @@ A gramática utilizada é inspirada no padrão ANTLR4, adaptada para a linguagem
 ```
 programa: 'programa' PARENTESES_E PARENTESES_D DELIMITADOR_E bloco DELIMITADOR_D;
 
-bloco: (declaracao | comando)*;
+bloco: (declaracao | instrucao)*;
 
 declaracao: tipo IDENTIFICADOR (RECEBE expressao)? PONTO_VIRGULA;
 
 tipo: INTEIRO | REAL | BOOL | CARACTER | TEXTO;
 
-comando: 
+instrucao: 
     | estruturaCondicional
     | estruturaRepeticaoEnquanto
     | estruturaRepeticaoPara
@@ -108,21 +108,21 @@ private ASTNode programa() {
 - Cria um nó `"programa"` com um filho: o bloco principal.
 
 #### **bloco()**
-Reconhece uma sequência de declarações e comandos:
+Reconhece uma sequência de declarações e instruções:
 ```java
 private ASTNode bloco() {
     ASTNode noBloco = new ASTNode("bloco");
-    while (ehDeclaracao() || ehComando()) {
+    while (ehDeclaracao() || ehInstrucao()) {
         if (ehDeclaracao()) {
             noBloco.adicionarFilho(declaracao());
         } else {
-            noBloco.adicionarFilho(comando());
+            noBloco.adicionarFilho(instrucao());
         }
     }
     return noBloco;
 }
 ```
-- Cria um nó `"bloco"` com filhos para cada declaração ou comando encontrado.
+- Cria um nó `"bloco"` com filhos para cada declaração ou instrução encontrada.
 
 #### **declaracao()**
 Reconhece declarações de variáveis:
@@ -144,10 +144,10 @@ private ASTNode declaracao() {
 ```
 - Cria um nó `"declaracao"` com filhos para tipo, identificador e (opcionalmente) expressão de inicialização.
 
-#### **comando()**
-Decide qual comando está presente e chama o método correspondente:
+#### **instrucao()**
+Decide qual instrução está presente e chama o método correspondente:
 ```java
-private ASTNode comando() {
+private ASTNode instrucao() {
     switch (tokenAtual.getType()) {
         case SE: return estruturaCondicional();
         case ENQUANTO: return estruturaRepeticaoEnquanto();
@@ -155,13 +155,13 @@ private ASTNode comando() {
         case ESCREVA: return comandoEscreva();
         case LEIA: return comandoLeia();
         case IDENTIFICADOR: return atribuicao();
-        default: erro("Comando inválido"); return null;
+        default: erro("Instrução inválida"); return null;
     }
 }
 ```
 
 #### **estruturaCondicional()**
-Reconhece comandos `se` e `senao`:
+Reconhece instruções `se` e `senao`:
 ```java
 private ASTNode estruturaCondicional() {
     consumir(TokenType.SE);
